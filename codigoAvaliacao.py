@@ -29,7 +29,6 @@ for id in range(3,tamanho):
         limElast = Tensao[id-1]
 
 fig, axs = plt.subplots(2, 2, layout='constrained')
-#teste2
 xLimRT = e[Tensao == limRT]
 yLimRT = limRT
 
