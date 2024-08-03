@@ -28,7 +28,8 @@ for id in range(3,tamanho):
     if angulo != antAngulo and limElast == 0:
         limElast = Tensao[id-1]
 
-fig, axs = plt.subplots(2, 2, layout='constrained')
+fig, axs = plt.subplot_mosaic([['upleft', 'right'],
+                               ['lowleft', 'right']], layout='constrained')
 xLimRT = e[Tensao == limRT]
 yLimRT = limRT
 
@@ -38,25 +39,31 @@ yLimElast = limElast
 regPlastica = (e >= xLimElast) & (e <= xLimRT)
 regElastica = (e <= xLimElast)
 
-axs[0][0].plot(e, Tensao, label='Região da Ruptura')
-axs[0][0].plot(e[regPlastica], Tensao[regPlastica], label='Região Plástica')
-axs[0][0].plot(e[regElastica], Tensao[regElastica], label='Região Elástica')
+axs["right"].plot(e, Tensao, label='Região da Ruptura')
+axs["right"].plot(e[regPlastica], Tensao[regPlastica], label='Região Plástica')
+axs["right"].plot(e[regElastica], Tensao[regElastica], label='Região Elástica')
 #axs[1].scatter([x for x in vetorTensao if x == limRT],limRT,s=20,facecolor='C0',edgecolor='k')
-axs[0][0].annotate('Limite de Resistência a Tensão', xy=(e[Tensao == limRT], limRT), xytext=(e[Tensao == limRT], limRT - 100000),
+axs["right"].annotate('Limite de Resistência a Tensão', xy=(e[Tensao == limRT], limRT), xytext=(e[Tensao == limRT], limRT - 100000),
                    arrowprops=dict(facecolor='black', shrink=0.1))
-axs[0][0].annotate('Limite de Escoamento', xy=(e[Tensao == limElast], limElast), xytext=(e[Tensao == limElast]+10, limElast - 5000),
+axs["right"].annotate('Limite de Escoamento', xy=(e[Tensao == limElast], limElast), xytext=(e[Tensao == limElast]+10, limElast - 5000),
                    arrowprops=dict(facecolor='black', shrink=0.1))
-axs[0][0].grid(True)
-axs[0][0].set_xlabel('e [m]')
-axs[0][0].set_ylabel('Tensão [Pa]')
-axs[0][0].set_title('Deformação')
-axs[0][0].legend()
+axs["right"].grid(True)
+axs["right"].set_xlabel('e [m]')
+axs["right"].set_ylabel('Tensão [Pa]')
+axs["right"].set_title('Deformação')
+axs["right"].legend()
 
-axs[0][1].plot(e, Tensao)
-axs[0][1].grid(True)
-axs[0][1].set_xlabel('e [m]')
-axs[0][1].set_ylabel('Tensão [Pa]')
-axs[0][1].set_title('Deformação')
+axs["upleft"].plot(e, Tensao)
+axs["upleft"].grid(True)
+axs["upleft"].set_xlabel('e [m]')
+axs["upleft"].set_ylabel('Tensão [Pa]')
+axs["upleft"].set_title('Limite de Resistência a Tracao')
+
+axs["lowleft"].plot(e, Tensao)
+axs["lowleft"].grid(True)
+axs["lowleft"].set_xlabel('e [m]')
+axs["lowleft"].set_ylabel('Tensão [Pa]')
+axs["lowleft"].set_title('Deformação')
 
 plt.tight_layout
 plt.show()
