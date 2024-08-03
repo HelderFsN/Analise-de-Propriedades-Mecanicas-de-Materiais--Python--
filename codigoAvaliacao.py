@@ -12,7 +12,7 @@ dl = dados[:,1]
 
 Lo = 0.0508
 Do = 0.0127
-
+#Teste
 A = (np.pi*Do**2.0)/4
 
 Tensao = F / A
