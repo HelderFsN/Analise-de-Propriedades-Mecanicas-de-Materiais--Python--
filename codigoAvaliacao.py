@@ -61,10 +61,13 @@ limInicialX_plot2 = regPlastica.x[4]
 limFinalY_plot2 = max(regRuptura.y) + 100000
 limInicialY_plot2 = regPlastica.y[4]
 
+enquadroPlot0 = [0, max(e)+20, 0, max(Tensao)+100000]
+enquadroPlot1 = [limInicialX_plot1, limFinalX_plot1,limInicialY_plot1,limFinalY_plot1]
+enquadroPlot2 = [limInicialX_plot2, limFinalX_plot2,limInicialY_plot2,limFinalY_plot2]
 
-plotagem.plotMosaico(fig, axs, "Tensão X Deformação",  "ε deformação [m]", "σ tensão [Pa]", "left",[regElastica, regPlastica, regRuptura],[0,max(e)+20,0,max(Tensao)+100000])
-plotagem.plotMosaico(fig, axs, "Limite de Escoamento",  "", "", "upright",[regElastica, regPlastica],[limInicialX_plot1, limFinalX_plot1,limInicialY_plot1,limFinalY_plot1])
-plotagem.plotMosaico(fig, axs, "Limite de Resistência a Tração",  "", "", "lowright",[regPlastica, regRuptura],[limInicialX_plot2, limFinalX_plot2,limInicialY_plot2,limFinalY_plot2])
+plotagem.plotMosaico(fig, axs, "Tensão X Deformação",  "ε deformação [m]", "σ tensão [Pa]", "left",[regElastica, regPlastica, regRuptura],enquadroPlot0)
+plotagem.plotMosaico(fig, axs, "Limite de Escoamento",  "", "", "upright",[regElastica, regPlastica],enquadroPlot1)
+plotagem.plotMosaico(fig, axs, "Limite de Resistência a Tração",  "", "", "lowright",[regPlastica, regRuptura],enquadroPlot2)
 
 plt.tight_layout
 plt.show()
