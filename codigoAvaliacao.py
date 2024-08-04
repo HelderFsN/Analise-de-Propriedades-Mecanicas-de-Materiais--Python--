@@ -1,24 +1,28 @@
 """
 	TENSÃO X DEFORMAÇÃO
 """
-
+from plotagem import plotagem
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Recebendo os dados do corpo de prova
 dados = pd.read_excel("dadosEnsaioTracao.xlsx").to_numpy()
 F = dados[:,0]
 dl = dados[:,1]
 
+# Definindo as dimenções inicias do corpo de prova
 Lo = 0.0508
 Do = 0.0127
-#Teste
 A = (np.pi*Do**2.0)/4
 
 Tensao = F / A
-limRT = max(Tensao)
 e = dl/Lo
 
+# Cálculo do limite de resistência a tração
+limRT = max(Tensao)
+
+#Cálculo do limite de elasticidade
 tamanho = Tensao.size
 antAngulo = round(np.tan(e[2] / Tensao[2]),8)
 limElast = 0
@@ -28,42 +32,24 @@ for id in range(3,tamanho):
     if angulo != antAngulo and limElast == 0:
         limElast = Tensao[id-1]
 
+#Plotagem,definindo a posição dos limites e as regiões
 fig, axs = plt.subplot_mosaic([['upleft', 'right'],
                                ['lowleft', 'right']], layout='constrained')
-xLimRT = e[Tensao == limRT]
-yLimRT = limRT
+class Regiao:
+    def __init__(self, inicio, fim, x, y, label):
+        self.inicio = np.where(y == inicio)[0][0]
+        self.fim = np.where(y == fim)[0][0] + 1
+        self.x = x[self.inicio:self.fim]
+        self.y = y[self.inicio:self.fim]
+        self.label = label
 
-xLimElast = e[Tensao == limElast]
-yLimElast = limElast
+regPlastica = Regiao(limElast, limRT, e, Tensao, "Região Plástica")
+regElastica = Regiao(0, limElast, e, Tensao, "Região Elástica")
+regRuptura = Regiao(limRT, Tensao[-1], e, Tensao, "Região da Ruptura")
 
-regPlastica = (e >= xLimElast) & (e <= xLimRT)
-regElastica = (e <= xLimElast)
-
-axs["right"].plot(e, Tensao, label='Região da Ruptura')
-axs["right"].plot(e[regPlastica], Tensao[regPlastica], label='Região Plástica')
-axs["right"].plot(e[regElastica], Tensao[regElastica], label='Região Elástica')
-#axs[1].scatter([x for x in vetorTensao if x == limRT],limRT,s=20,facecolor='C0',edgecolor='k')
-axs["right"].annotate('Limite de Resistência a Tensão', xy=(e[Tensao == limRT], limRT), xytext=(e[Tensao == limRT], limRT - 100000),
-                   arrowprops=dict(facecolor='black', shrink=0.1))
-axs["right"].annotate('Limite de Escoamento', xy=(e[Tensao == limElast], limElast), xytext=(e[Tensao == limElast]+10, limElast - 5000),
-                   arrowprops=dict(facecolor='black', shrink=0.1))
-axs["right"].grid(True)
-axs["right"].set_xlabel('e [m]')
-axs["right"].set_ylabel('Tensão [Pa]')
-axs["right"].set_title('Deformação')
-axs["right"].legend()
-
-axs["upleft"].plot(e, Tensao)
-axs["upleft"].grid(True)
-axs["upleft"].set_xlabel('e [m]')
-axs["upleft"].set_ylabel('Tensão [Pa]')
-axs["upleft"].set_title('Limite de Resistência a Tracao')
-
-axs["lowleft"].plot(e, Tensao)
-axs["lowleft"].grid(True)
-axs["lowleft"].set_xlabel('e [m]')
-axs["lowleft"].set_ylabel('Tensão [Pa]')
-axs["lowleft"].set_title('Deformação')
+plotagem.plotGeral(fig, axs, "Tensão X Deformação",  "deformação [m]", "tensão [Pa]", "right",[regElastica, regPlastica, regRuptura])
+plotagem.plotMosaico(fig, axs, "Limite de Resistência a Tração", e, Tensao, "ε", "σ","upleft")
+plotagem.plotMosaico(fig, axs, "Limite de Escoamento",e, Tensao, "ε", "σ","lowleft")
 
 plt.tight_layout
 plt.show()
