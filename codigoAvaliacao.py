@@ -24,32 +24,47 @@ limRT = max(Tensao)
 
 #Cálculo do limite de elasticidade
 tamanho = Tensao.size
-antAngulo = round(np.tan(e[2] / Tensao[2]),8)
+antAngulo = round(np.tan(e[1] / Tensao[1]),8)
 limElast = 0
 
-for id in range(3,tamanho):
+for id in range(2,tamanho):
     angulo = round(np.tan(e[id]/Tensao[id]),8)
     if angulo != antAngulo and limElast == 0:
         limElast = Tensao[id-1]
 
 #Plotagem,definindo a posição dos limites e as regiões
-fig, axs = plt.subplot_mosaic([['upleft', 'right'],
-                               ['lowleft', 'right']], layout='constrained')
+fig, axs = plt.subplot_mosaic([['left', 'upright'],
+                               ['left', 'lowright']], layout='constrained')
 class Regiao:
-    def __init__(self, inicio, fim, x, y, label):
+    def __init__(self, inicio, fim, x, y, label, limite,cor):
         self.inicio = np.where(y == inicio)[0][0]
         self.fim = np.where(y == fim)[0][0] + 1
         self.x = x[self.inicio:self.fim]
         self.y = y[self.inicio:self.fim]
+        self.limite = limite
         self.label = label
+        self.cor = cor
 
-regPlastica = Regiao(limElast, limRT, e, Tensao, "Região Plástica")
-regElastica = Regiao(0, limElast, e, Tensao, "Região Elástica")
-regRuptura = Regiao(limRT, Tensao[-1], e, Tensao, "Região da Ruptura")
+regElastica = Regiao(0, limElast, e, Tensao, "Região Elástica", "Limite de Escoamento","orange")
+regPlastica = Regiao(limElast, limRT, e, Tensao, "Região Plástica", "Limite de Resistência a Tração","blue")
+regRuptura = Regiao(limRT, Tensao[-1], e, Tensao, "Região da Ruptura", "Ruptura","red")
 
-plotagem.plotGeral(fig, axs, "Tensão X Deformação",  "deformação [m]", "tensão [Pa]", "right",[regElastica, regPlastica, regRuptura])
-plotagem.plotMosaico(fig, axs, "Limite de Resistência a Tração", e, Tensao, "ε", "σ","upleft")
-plotagem.plotMosaico(fig, axs, "Limite de Escoamento",e, Tensao, "ε", "σ","lowleft")
+limFinalX_plot1 = regPlastica.x[4]
+limInicialX_plot1 = 0
+
+limFinalY_plot1 = regPlastica.y[4]
+limInicialY_plot1 = 0
+
+limFinalX_plot2 = regRuptura.x[1]+2
+limInicialX_plot2 = regPlastica.x[4]
+
+limFinalY_plot2 = max(regRuptura.y) + 100000
+limInicialY_plot2 = regPlastica.y[4]
+
+
+plotagem.plotMosaico(fig, axs, "Tensão X Deformação",  "ε deformação [m]", "σ tensão [Pa]", "left",[regElastica, regPlastica, regRuptura],[0,max(e)+20,0,max(Tensao)+100000])
+plotagem.plotMosaico(fig, axs, "Limite de Escoamento",  "", "", "upright",[regElastica, regPlastica],[limInicialX_plot1, limFinalX_plot1,limInicialY_plot1,limFinalY_plot1])
+plotagem.plotMosaico(fig, axs, "Limite de Resistência a Tração",  "", "", "lowright",[regPlastica, regRuptura],[limInicialX_plot2, limFinalX_plot2,limInicialY_plot2,limFinalY_plot2])
 
 plt.tight_layout
 plt.show()
