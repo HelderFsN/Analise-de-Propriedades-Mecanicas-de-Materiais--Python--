@@ -7,7 +7,7 @@ def plotMosaico(fig, axs, title, labelx, labely, pos, regioes, enquadro, posText
         if textPlot:
             axs[pos].annotate(f'{reg.anguloGraus:.4f}°', xy=(reg.x[0], reg.y[0]), xytext=(reg.x[0]+0.0001, reg.y[0]+0.001),
                            arrowprops=dict(facecolor='red', shrink=0))
-            axs[pos].text(reg.x[0]+0.001, reg.y[0]+0.01, f'$\epsilon={reg.variacao:.4f}$',fontsize=15)
+            axs[pos].text(reg.x[0]+0.001, reg.y[0]+0.01, rf'$\epsilon={reg.variacao:.4f}$ GPa',fontsize=15)
 
     axs[pos].grid(False)
     axs[pos].set_xlabel(labelx)

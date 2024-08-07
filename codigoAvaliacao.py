@@ -8,7 +8,7 @@ import numpy as np
 
 # Recebendo os dados do corpo de prova
 dados = pd.read_excel("dadosEnsaioTracao.xlsx").to_numpy()
-Forca = dados[:,0] # Em N
+Forca = dados[:,0] # Em Newtons
 comprimentoFinal = dados[:,1] # Em Metro
 
 # Definindo as dimenções inicias do corpo de prova. OBS: tudo em milímetro
@@ -24,17 +24,18 @@ limRT = max(Tensao)
 
 #Cálculo do limite de elasticidade
 tamanho = Tensao.size
-antAngulo = round(np.tan(e[1] / Tensao[1]),8)
+anguloInicial = round(np.tan(e[1] / Tensao[1]),8)
 limElast = 0
 
 for id in range(2,tamanho):
     angulo = round(np.tan(e[id]/Tensao[id]),8)
-    if angulo != antAngulo and limElast == 0:
+    if angulo != anguloInicial:
         limElast = Tensao[id-1]
+        break
 
 #Plotagem,definindo a posição dos limites e as regiões
 fig, axs = plt.subplot_mosaic([['upleft', 'upright'],
-                               ['lowleft', 'lowright']],  gridspec_kw={'hspace': 0.5})
+                               ['lowleft', 'lowright']], figsize=(15,10), gridspec_kw={'hspace': 0.5})
 class Regiao:
     def __init__(self, inicio, fim, x, y, label, limite, cor):
         self.inicio = np.where(y == inicio)[0][0]
