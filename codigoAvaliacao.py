@@ -69,7 +69,6 @@ limFinal_plot2 = (regRuptura.x[1]+0.05, max(regRuptura.y)+0.01)
 limInicial_plot3 = (0,0)
 limFinal_plot3 = (max(regElastica.x)+0.001, max(regElastica.y)+0.01)
 
-
 enquadroPlot0 = [limInicial_plot0[0], limFinal_plot0[0], limInicial_plot0[1], limFinal_plot0[1]]
 enquadroPlot1 = [limInicial_plot1[0], limFinal_plot1[0], limInicial_plot1[1], limFinal_plot1[1]]
 enquadroPlot2 = [limInicial_plot2[0], limFinal_plot2[0], limInicial_plot2[1], limFinal_plot2[1]]
