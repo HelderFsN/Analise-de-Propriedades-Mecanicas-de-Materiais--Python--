@@ -160,11 +160,6 @@ e = (comprimentoFinal-comprimentoInicial)/comprimentoInicial
 
 
 ```python
-
-```
-
-
-```python
 # Cálculo do limite de resistência a tração
 limRT = max(Tensao)
 
@@ -241,10 +236,5 @@ plotagem.plotMosaico(fig, axs, "Módulo de Elasticidade",  "", "", "lowleft",
 plt.tight_layout
 plt.show()
 ```
-    
 
-
-
-```python
-
-```
+![grafico](https://github.com/HelderFsN/Analise-de-Propriedades-Mecanicas-de-Materiais--Python--/blob/main/figuras/melhoraNoGrafico.png?raw=true)
