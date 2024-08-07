@@ -97,11 +97,6 @@ Em seguida será lido o arquivo .xlsx, no qual contém a tabela. Também será c
 dados = pd.read_excel("dadosEnsaioTracao.xlsx").to_numpy()
 ```
 
-
-```python
-print(dados)
-```
-
     [[ 0.    50.8  ]
      [ 7.33  50.851]
      [15.1   50.902]
