@@ -136,11 +136,18 @@ comprimentoFinal = dados[:,1] # Em Metro (Segunda Coluna)
 3. **Dimensionar o corpo de prova/calcular a tensão e a deformação**
 
 As medidas iniciais do corpo de prova foram tiradas da questão do *Callister* e para os calculos de área, força e deformação serão utilizados a seguintes fórmulas:
-\begin{align}
-    Área& = \frac{\pi \cdot Do^2}{4}& \sigma& = \frac{F}{Área}& \epsilon = \frac{\Delta l}{Lo}
-\end{align}
 
+$$
+Área = \frac{\pi \cdot Do^2}{4} 
+$$
 
+$$
+\sigma = \frac{F}{Área}
+$$
+
+$$
+\epsilon = \frac{\Delta l}{Lo}
+$$
 
 ```python
 # Definindo as dimenções inicias do corpo de prova. OBS: tudo em milímetro
