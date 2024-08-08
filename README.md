@@ -1,8 +1,9 @@
 # 3ª Avaliação de Métodos Computacionais
- Análise de Propriedades Mecânicas de Materiais (Python) para a 3ªAvaliação da disciplina ministrada pelo professor Carlos Ronyhelton
+ Análise de Propriedades Mecânicas de Materiais (Python) para a 3ªAvaliação da disciplina de Métodos Computacionais ministrada pelo professor Carlos Ronyhelton
+ 
 #### **DESENVOLVIMENTO DO CÓDIGO**
 
-1. Importação das bibliotecas
+1. **Importação das bibliotecas**
    
 O primeiro passo para a realização da criação do gráfico para análise das propriedades mecânicas é a importação das bibliotecas que serão uteis para leitura da tabela, plotagem de gráficos e manipulação de matrizes, a saber pandas, matplotlib e numpy, respectivamente, em que serão chamadas como variáveis simplificadas: *pd*, *plt*, *np*.
 
@@ -13,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 ```
 
-2. Modularização (Criação do módulo)
+2. **Modularização (Criação do módulo)**
 
 Também será importado um módulo que foi criado contida a função *plotMosaico* para servi como subalgoritmo, reduzindo o código principal. O módulo está condito no diretório *plotagem* e está organizado da seguinte forma:
 
@@ -47,7 +48,9 @@ from plotagem import plotagem
     5 directories, 13 files
 
 
-O conteúdo da função está exposto a baixo e consiste em plotar as diferentes regiões que estaram contidos numa lista em formato de objetos e são inseridas pelo parâmetro *regioes*. Outro parâmetro importante será o *textPlot* em que receberá um booleano que define se será adicionado uma indicação do ângulo e do modulo de elasticidade na plotagem da região. Vê-se que compete saber essas informações só na região elástica, logo será indicado como *True* quando for feito a chamada da função para ela. A plotagem será feita em formato moisaco do matplotlib, por essa razão foi adicionado o parâmetro *pos*, que defini a posição do objeto axes, o qual também é um parâmetro no qual diz o plot que eu estou me referindo. As posições dos plots na figura são definidas na criação da variável *axs* que recebe o plot e são *upleft*, *upright*, *lowleft*, *lowright*, traduzindo, superior esquerdo, superior esquerdo, inferior esquerdo e inferior direito, respectivamente. Os demais parâmetros são para as funções de ajuste e plotagem do matplotlib.
+O conteúdo da função está exposto a baixo e consiste em plotar as diferentes regiões que estaram contidos numa lista em formato de objetos e são inseridas pelo parâmetro *regioes*. Outro parâmetro importante será o *textPlot* em que receberá um booleano que define se será adicionado uma indicação do ângulo e do modulo de elasticidade na plotagem da região. Vê-se que compete saber essas informações só na região elástica, logo será indicado como *True* quando for feito a chamada da função para ela. 
+
+A plotagem será feita em formato moisaco do matplotlib, por essa razão foi adicionado o parâmetro *pos*, que defini a posição do objeto axes, o qual também é um parâmetro no qual diz o plot que eu estou me referindo. As posições dos plots na figura são definidas na criação da variável *axs* que recebe o plot e são *upleft*, *upright*, *lowleft*, *lowright*, traduzindo, superior esquerdo, superior esquerdo, inferior esquerdo e inferior direito, respectivamente. Os demais parâmetros são para as funções de ajuste e plotagem do matplotlib.
 
 
 ```python
@@ -65,7 +68,7 @@ for reg in regioes:
                                arrowprops=dict(facecolor='black', shrink=0.1))
 ```
 
-Em segundo plano, tem-se a utilização do *textPlot* para definir a região e o gráfico que ficará indicado o ângulo e o texto contido o  **módulo de elasticidade**
+Em segundo plano, tem-se a utilização do *textPlot* para definir a região e o gráfico que ficará indicado o ângulo e o texto contido o  **módulo de elasticidade**. Essa indicação terá como referência o início do gráfico.
 
 
 ```python
@@ -87,7 +90,7 @@ axs[pos].axis(enquadro)
 axs[pos].legend(loc=legendaLoc)
 ```
 
-3. Leitura dos dados do corpo de prova
+3. **Leitura dos dados do corpo de prova**
 
 Em seguida será lido o arquivo .xlsx, no qual contém a tabela. Também será convertido essa tabela para um *array do numpy* para auxiliar na manipulação. Cada coluna será lida e recibida numa nos seus respectivos vetores que compreende cada uma delas. 
 
@@ -95,6 +98,11 @@ Em seguida será lido o arquivo .xlsx, no qual contém a tabela. Também será c
 ```python
 # Recebendo os dados do corpo de prova
 dados = pd.read_excel("dadosEnsaioTracao.xlsx").to_numpy()
+```
+
+
+```python
+print(dados)
 ```
 
     [[ 0.    50.8  ]
@@ -120,18 +128,17 @@ dados = pd.read_excel("dadosEnsaioTracao.xlsx").to_numpy()
 Forca = dados[:,0] # Em Newtons (Primeira Coluna)
 comprimentoFinal = dados[:,1] # Em Metro (Segunda Coluna)
 ```
-![image-Avaliacao.png](https://i.postimg.cc/Pq4X6YQB/image-Avaliacao.png)
 
+![image-Avaliacao.png](https://i.postimg.cc/Pq4X6YQB/image-Avaliacao.png)
 
 (dados retirados do livro de Callister, W.D. e Rethwisch, D.G Fundamentals of Materials Science and Engineering, 4th Ed.)
 
-
-3. Dimensionar o corpo de prova e calcular a tensão e a deformação
+3. **Dimensionar o corpo de prova/calcular a tensão e a deformação**
 
 As medidas iniciais do corpo de prova foram tiradas da questão do *Callister* e para os calculos de área, força e deformação serão utilizados a seguintes fórmulas:
 
 $$
-    Área = \frac{\pi \cdot Do^2}{4} 
+Área = \frac{\pi \cdot Do^2}{4} 
 $$
 
 $$
@@ -139,9 +146,8 @@ $$
 $$
 
 $$
- \epsilon = \frac{\Delta l}{Lo}
+\epsilon = \frac{\Delta l}{Lo}
 $$
-
 
 ```python
 # Definindo as dimenções inicias do corpo de prova. OBS: tudo em milímetro
@@ -153,24 +159,49 @@ Tensao = Forca / area
 e = (comprimentoFinal-comprimentoInicial)/comprimentoInicial
 ```
 
+4. **Calcular os limites de resistência a tração e de elasticidade**
+
+Primeiramente, tem-se que por definição que o limite de resistência a tração é o ponto máximo do gráfico de tensão-deformação logo para acha-ló será utilizado a função *max*.
+
 
 ```python
 # Cálculo do limite de resistência a tração
 limRT = max(Tensao)
+```
 
+Em segundo lugar, para o limite de elasticidade se sabe que é o ponto em que os anteriores tem a mesma taxa de variação, ou seja, o ponto seguinte do gráfico terá um afastamento inicial da linearidade da curva, logo para saber esse ponto é definido um ângulo inicial e foi verificado qual ponto que será mudado esse angulo. Assim foi verificado o limite de elasticidade.
+
+
+```python
 #Cálculo do limite de elasticidade
 tamanho = Tensao.size
-antAngulo = round(np.tan(e[1] / Tensao[1]),8)
+anguloInicial = round(np.tan(e[1] / Tensao[1]),8)
 limElast = 0
 
 for id in range(2,tamanho):
     angulo = round(np.tan(e[id]/Tensao[id]),8)
-    if angulo != antAngulo and limElast == 0:
+    if angulo != anguloInicial:
         limElast = Tensao[id-1]
+        break
+```
 
-#Plotagem,definindo a posição dos limites e as regiões
-fig, axs = plt.subplot_mosaic([['upleft', 'upright'],
-                               ['lowleft', 'lowright']],  figsize=(15,10), gridspec_kw={'hspace': 0.5})
+5. **Criação das Regiões (classe)**
+
+Como cada região tem sua peculiaridade que serão expressas no gráfico, será criado um classe para desenvolver um objeto de cada região com sua respectivas propriedades, como inicio, fim e cor, por exemplo. Também aqui será caculado o *módulo de elasticidade* , quando, na *class*, ser definido a variação, pois o módulo de elasticidade é a taxa de variação da região elástica, que é dado pela fórmula abaixo. 
+
+$$
+E = \frac{\Delta \sigma}{\Delta \epsilon}
+$$
+
+Já que a região elástica é uma função afim, pode-se determinar o ângulo entre a reta e o eixo horizontal pelo arco tangente dessa mesma variação.
+
+$$
+\theta = \arctan(E)
+$$
+
+
+```python
+#definindo a posição dos limites e as regiões
 class Regiao:
     def __init__(self, inicio, fim, x, y, label, limite, cor):
         self.inicio = np.where(y == inicio)[0][0]
@@ -191,6 +222,17 @@ class Regiao:
 regElastica = Regiao(0, limElast, e, Tensao, "Região Elástica", "Limite de Escoamento", "orange")
 regPlastica = Regiao(limElast, limRT, e, Tensao, "Região Plástica", "Limite de Resistência a Tração", "blue")
 regRuptura = Regiao(limRT, Tensao[-1], e, Tensao, "Região da Ruptura", "Ruptura", "red")
+```
+
+6. **Plotagem (Criação do Gráfico)**
+
+Aqui será plotado o gráfico utilizando a função do *matplotlib*: *subplot_mosaic*, que serve para plotar múltiplos gráficos em uma figura, definindo sua posição, que é dita usando *upleft*,*uprigh*,*lowlef*,*lowright*. E para configurar o gráfico, definindo as limites dos eixos, as distâncias do texto para a curva, foi criado tuplas, que representam vetores nessa funcionalidade. Em seguida, com todas a variáveis e objetos criados foi chamado o módulo *plotagem* que contem a função que fará os ajustes para cada região e plot: *plotMosaico*. Por fim, será plotado a figura com todos os ajustes e gráficos nas suas posições definidas.
+
+
+```python
+#Plotagem
+fig, axs = plt.subplot_mosaic([['upleft', 'upright'],
+                               ['lowleft', 'lowright']],  figsize=(15,10), gridspec_kw={'hspace': 0.5})
 
 limInicial_plot0 = (0,0)
 limFinal_plot0 = (max(e)+0.1, max(Tensao)+0.1)
@@ -226,10 +268,11 @@ plotagem.plotMosaico(fig, axs, "Limite de Escoamento",  "", "", "upright",
 plotagem.plotMosaico(fig, axs, "Limite de Resistência a Tração",  "", "", "lowright",
                      [regPlastica, regRuptura], enquadroPlot2, distanciaTextPlot2, lengedaLocPlot2, False)
 plotagem.plotMosaico(fig, axs, "Módulo de Elasticidade",  "", "", "lowleft",
-                     [regElastica], enquadroPlot3, distanciaTextPlot3, lengedaLocPlot3)
+                     [regElastica], enquadroPlot3, distanciaTextPlot3, lengedaLocPlot3,True)
 
 plt.tight_layout
 plt.show()
 ```
+
 
 ![grafico](https://github.com/HelderFsN/Analise-de-Propriedades-Mecanicas-de-Materiais--Python--/blob/main/figuras/melhoraNoGrafico.png?raw=true)
