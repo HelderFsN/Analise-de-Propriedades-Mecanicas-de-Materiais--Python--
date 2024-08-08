@@ -33,9 +33,7 @@ for id in range(2,tamanho):
         limElast = Tensao[id-1]
         break
 
-#Plotagem,definindo a posição dos limites e as regiões
-fig, axs = plt.subplot_mosaic([['upleft', 'upright'],
-                               ['lowleft', 'lowright']], figsize=(15,10), gridspec_kw={'hspace': 0.5})
+#,definindo a posição dos limites e as regiões
 class Regiao:
     def __init__(self, inicio, fim, x, y, label, limite, cor):
         self.inicio = np.where(y == inicio)[0][0]
@@ -56,6 +54,10 @@ class Regiao:
 regElastica = Regiao(0, limElast, e, Tensao, "Região Elástica", "Limite de Escoamento", "orange")
 regPlastica = Regiao(limElast, limRT, e, Tensao, "Região Plástica", "Limite de Resistência a Tração", "blue")
 regRuptura = Regiao(limRT, Tensao[-1], e, Tensao, "Região da Ruptura", "Ruptura", "red")
+
+#Plotagem
+fig, axs = plt.subplot_mosaic([['upleft', 'upright'],
+                               ['lowleft', 'lowright']], figsize=(15,10), gridspec_kw={'hspace': 0.5})
 
 limInicial_plot0 = (0,0)
 limFinal_plot0 = (max(e)+0.1, max(Tensao)+0.1)
@@ -87,7 +89,8 @@ lengedaLocPlot3 = "upper right"
 plotagem.plotMosaico(fig, axs, "Tensão X Deformação",  "ε deformação [%]", "σ tensão [Pa]", "upleft", [regElastica, regPlastica, regRuptura], enquadroPlot0, distanciaTextPlot0, lengedaLocPlot0,False)
 plotagem.plotMosaico(fig, axs, "Limite de Escoamento",  "", "", "upright", [regElastica, regPlastica], enquadroPlot1, distanciaTextPlot1, lengedaLocPlot1, False)
 plotagem.plotMosaico(fig, axs, "Limite de Resistência a Tração",  "", "", "lowright", [regPlastica, regRuptura], enquadroPlot2, distanciaTextPlot2, lengedaLocPlot2, False)
-plotagem.plotMosaico(fig, axs, "Módulo de Elasticidade",  "", "", "lowleft", [regElastica], enquadroPlot3, distanciaTextPlot3, lengedaLocPlot3)
+plotagem.plotMosaico(fig, axs, "Módulo de Elasticidade",  "", "", "lowleft", [regElastica], enquadroPlot3, distanciaTextPlot3, lengedaLocPlot3,True)
+
 
 plt.tight_layout
 plt.show()
