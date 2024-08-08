@@ -1,5 +1,5 @@
 # 3ª Avaliação de Métodos Computacionais
- Análise de Propriedades Mecânicas de Materiais (Python) para a 3ªAvaliação da disciplina ministrada pelo professor Carlos Ronyhelton
+ Análise de Propriedades Mecânicas de Materiais (Python) para a 3ªAvaliação da disciplina de Métodos Computacionais ministrada pelo professor Carlos Ronyhelton
 #### **DESENVOLVIMENTO DO CÓDIGO**
 
 1. Importação das bibliotecas
